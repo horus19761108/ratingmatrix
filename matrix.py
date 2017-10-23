@@ -20,7 +20,7 @@ def getwritef_path():
 
     return writef_path
     
-#指定されたフォルダ内の
+#指定されたフォルダ内のcsvを結合しデータフレーム化する
 def read(f_path):
     data_list = []
 
@@ -33,7 +33,7 @@ def read(f_path):
         data = input.read()
         data = data.split('\n')
 
-    #フォルダ内のCSVファイルをすべて読み込み、条件に一致するレコードを取り出す
+    #フォルダ内のCSVファイルをすべて読み込む
     for file in files:
         temp_f = pd.read_csv(file,names=data,encoding='shift_jis')
         temp_f['filename'] = os.path.basename(file)
@@ -44,6 +44,7 @@ def read(f_path):
 
     return data_f
 
+#データフレーム内から指定した条件でデータを抽出する
 def select(data_f, name, value):
     select_f = data_f[data_f[name].isin(value)]
 

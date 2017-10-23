@@ -4,7 +4,7 @@ import tkinter
 import tkinter.messagebox as tkmsg
 import matrix
 
-
+# 完了メッセージ表示
 def message():
     mBox = tkinter.Tk()
     mBox.withdraw()    #←これでTkの小さいウィンドウが非表示になる。
@@ -37,6 +37,7 @@ def matrix_select():
 root = tkinter.Tk()
 # キャンバスの設定
 root.geometry('800x150')
+root.title('格付マトリクス抽出')
 
 ## メニューバーの作成
 menubar = tkinter.Menu(root)
@@ -46,7 +47,7 @@ filemenu = tkinter.Menu(menubar)
 menubar.add_cascade(label='ファイル', menu=filemenu)
 filemenu.add_command(label='閉じる', command=root.destroy)
 
-## 読み取りファイルエリアの作成
+## 読み取りファイルエリア
 # 読み取りフォルダラベル
 buff_label_r = tkinter.StringVar()
 buff_label_r.set("読み込むフォルダ：")
@@ -59,7 +60,7 @@ entry_r.place(x=110,y=10)
 button_matrix_r = tkinter.Button(root, text = '参照', command = get_matrix_r_path)
 button_matrix_r.place(x=730,y=5)
 
-## 書き込みファイルエリアの作成
+## 書き込みファイルエリア
 # 書き込みファイル用ラベル
 buff_label_w = tkinter.StringVar()
 buff_label_w.set("作成ファイル名：")
