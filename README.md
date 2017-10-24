@@ -24,6 +24,17 @@
       English : <http://market.jsda.or.jp/eigo/html/saiken/kehai/downloadInput_e.php?_ga=2.188697448.1780810083.1508666206-1991158651.1492664028>  
   
 # 開発履歴
+[2017/10/24]  
+* matrix.py  
+    * 関数[matrix_to_csv(data_f, wf_path)]
+        * エラー処理の追加
+    * 関数[getreadfiles()]
+        * 入力ファイルすべてののフルパスをリストで返す
+* matrix_tk.py
+    * ログ表示用のリストボックスを追加
+    * 関数[put_log(name, value, select_f)]
+        * 実行ログを編集し、リストボックスへ表示する
+  
 [2017/10/22]  
 * matrix.py  
     * 関数[getreaddir_path()]  

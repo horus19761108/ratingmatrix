@@ -4,11 +4,13 @@ import tkinter.filedialog as tkfl
 import glob
 import os
 
+files = None
+
 #読み込むフォルダパスを取得(返り値：フォルダパス(str))
 def getreaddir_path():
     tk = tkinter.Tk()
     tk.withdraw()  
-    readf_path = tkfl.askdirectory()
+    readf_path = tkfl.askdirectory().replace('/',os.sep)
 
     return readf_path
 
@@ -16,12 +18,13 @@ def getreaddir_path():
 def getwritef_path():
     tk = tkinter.Tk()
     tk.withdraw()  
-    writef_path = tkinter.filedialog.asksaveasfilename(filetypes=[('csv file','*.csv')])
+    writef_path = tkinter.filedialog.asksaveasfilename(filetypes=[('csv file','*.csv')]).replace('/',os.sep)
 
     return writef_path
     
 #指定されたフォルダ内のcsvを結合しデータフレーム化する
 def read(f_path):
+    global files
     data_list = []
 
     #指定のフォルダからすべてのcsvファイルのパスをリスト化
@@ -35,9 +38,10 @@ def read(f_path):
 
     #フォルダ内のCSVファイルをすべて読み込む
     for file in files:
-        temp_f = pd.read_csv(file,names=data,encoding='shift_jis')
-        temp_f['filename'] = os.path.basename(file)
-        data_list.append(temp_f)
+#        temp_f = pd.read_csv(file,names=data,encoding='shift_jis')
+#        temp_f['filename'] = os.path.basename(file)
+#        data_list.append(temp_f)
+        data_list.append(pd.read_csv(file,names=data,encoding='shift_jis'))
 
     #リスト化されたデータフレームを結合。indexも降りなおす
     data_f = pd.concat(data_list, ignore_index=True)
@@ -53,10 +57,20 @@ def select(data_f, name, value):
 
 #データフレームをファイル出力
 def matrix_to_csv(data_f, wf_path):
-    data_f.to_csv(path_or_buf=wf_path)
+    try:
+        data_f.to_csv(path_or_buf=wf_path)
+    except:
+        return False
 
     return True
-    
+
+#読み込んだファイル名を取得する
+def getreadfiles():
+    if files != None:
+        return files
+    else:
+        return False
+
 if __name__ == "__main__":
     data_f = read(getreaddir_path())
 
