@@ -16,9 +16,14 @@ def get_matrix_w_path():
 def matrix_select():
     data_f = matrix.read(entry_r.get())
 
-    name  = '格付会社コード'
-    value = [1]
-    select_f = matrix.select(data_f, name, value).reset_index(drop = True)
+#    name  = '残存年'
+#    value = ['01']
+    name  = entry_s.get()
+    value = [str(entry_v.get())]
+    if name != "":
+        select_f = matrix.select(data_f, name, value).reset_index(drop = True)
+    else:
+        select_f = data_f
 
     matrix.matrix_to_csv(select_f, entry_w.get())
 
@@ -50,7 +55,7 @@ def put_log(name, value, select_f):
 ### インターフェースの作成 ###
 root = tkinter.Tk()
 # キャンバスの設定
-root.geometry('760x250')
+root.geometry('760x270')
 root.title('格付マトリクス抽出')
 
 ## メニューバーの作成
@@ -101,27 +106,72 @@ button_matrix_w = tkinter.Button(
                     )
 button_matrix_w.place(x=720,y=35)
 
-## 処理開始用ボタン
+## 検索条件入力エリア
+# 検索条件ラベル
+buff_label_s = tkinter.StringVar()
+buff_label_s.set("検索条件：")
+label_search = tkinter.Label(
+                        root,
+                        textvariable = buff_label_s
+                    )
+label_search.place(x=5,y=75)
+# 条件１入力エリア(項目)
+search_col = matrix.getheader()
+search_col.insert(0,"")
+entry_s  = tkinter.Spinbox(
+                    root,
+                    width=20,
+                    value=search_col,
+                    state = 'readonly'
+                )
+entry_s.place(x=100,y=75)
+
+buff_label_sc = tkinter.StringVar()
+buff_label_sc.set("が")
+label_search_con = tkinter.Label(
+                        root,
+                        textvariable = buff_label_sc
+                    )
+label_search_con.place(x=250,y=75)
+
+# 条件２入力エリア(値)
+entry_v  = tkinter.Entry(
+                    root,
+                    width=20
+                )
+entry_v.place(x=300,y=75)
+buff_label_sv = tkinter.StringVar()
+buff_label_sv.set("と等しい")
+label_search_val = tkinter.Label(
+                        root,
+                        textvariable = buff_label_sv
+                    )
+label_search_val.place(x=450,y=75)
+
+
+
+## 検索開始用ボタン
 button_submit = tkinter.Button(
                         root,
-                        text = '実行',
+                        text = '検索',
+                        width=30,
                         command = matrix_select
                     )
-button_submit.place(x=380,y=70)
+button_submit.place(x=500,y=70)
 
 ## ログ表示エリア設定
 # フレームの設定
-frame = tkinter.Frame(
+frame = tkinter.LabelFrame(
                 root,
-                relief=tkinter.RIDGE,
-                borderwidth = 4
+                text="実行ログ",
+                relief=tkinter.RIDGE
             )
 frame.place(x=5,y=100)
 
 # ログ表示エリア用リストボックス
 lb = tkinter.Listbox(
                 frame,
-                width = 120,
+                width = 121,
                 height = 7
             )
 lb.grid(row=0, column=0,sticky=tkinter.NSEW)

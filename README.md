@@ -24,12 +24,30 @@
       English : <http://market.jsda.or.jp/eigo/html/saiken/kehai/downloadInput_e.php?_ga=2.188697448.1780810083.1508666206-1991158651.1492664028>  
   
 # 開発履歴
+[2017/10/26]  
+* UIの変更に伴い、イメージ図(ui_image.jpg)の差し替え  
+* matrix.py  
+    * 関数[getreadf_path()]  
+        * 選択したファイル(複数可)すべてのフルパスを返す  
+    * 関数[getheader()]  
+        * ヘッダー情報をリストで返す  
+* matrix_tk.py  
+    * 検索条件設定用インターフェースの設置  
+    * [実行]ボタンを[検索]ボタンへ変更  
+    * 検索条件未設定で[検索]すると、読み込んだレコードを全て出力する
+    * フレームをラベル付きフレームへ変更  
+    * 関数[matrix_select()]  
+        * 検索条件をUIから取得するように変更  
+* data/matrix_columns.txt
+    *ヘッダ情報を変更
+  
 [2017/10/24]  
+* UIの変更に伴い、イメージ図(ui_image.jpg)の差し替え  
 * matrix.py  
     * 関数[matrix_to_csv(data_f, wf_path)]
         * エラー処理の追加
     * 関数[getreadfiles()]
-        * 入力ファイルすべてののフルパスをリストで返す
+        * 入力ファイルすべてのフルパスをリストで返す
 * matrix_tk.py
     * ログ表示用のリストボックスを追加
     * 関数[put_log(name, value, select_f)]

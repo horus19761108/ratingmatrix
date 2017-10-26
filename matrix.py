@@ -4,9 +4,12 @@ import tkinter.filedialog as tkfl
 import glob
 import os
 
+# グローバル変数
 files = None
+header = None
+headerfile = ".\\data\\matrix_columns.txt"
 
-#読み込むフォルダパスを取得(返り値：フォルダパス(str))
+# 読み込むフォルダパスを取得(返り値：フォルダパス(str))
 def getreaddir_path():
     tk = tkinter.Tk()
     tk.withdraw()  
@@ -14,7 +17,15 @@ def getreaddir_path():
 
     return readf_path
 
-#出力ファイル名の取得
+# 入力ファイル名の取得
+def getreadf_path():
+    tk = tkinter.Tk()
+    tk.withdraw()  
+    readf_path = tkfl.askopenfilenames(filetypes=[('csv file','*.csv')])
+
+    return readf_path
+
+# 出力ファイル名の取得
 def getwritef_path():
     tk = tkinter.Tk()
     tk.withdraw()  
@@ -22,40 +33,36 @@ def getwritef_path():
 
     return writef_path
     
-#指定されたフォルダ内のcsvを結合しデータフレーム化する
+# 指定されたフォルダ内のcsvを結合しデータフレーム化する
 def read(f_path):
-    global files
+    global files, header
     data_list = []
 
-    #指定のフォルダからすべてのcsvファイルのパスをリスト化
+    # 指定のフォルダからすべてのcsvファイルのパスをリスト化
     files = glob.glob(os.path.join(f_path,'*.csv')) 
 
-    #ヘッダーファイルの読み込み
-    headerfile = ".\\data\\matrix_columns.txt"
+    # ヘッダーファイルの読み込み
     with open (headerfile, 'r', encoding='utf-8') as input:
-        data = input.read()
-        data = data.split('\n')
+        header = input.read()
+        header = header.split('\n')
 
-    #フォルダ内のCSVファイルをすべて読み込む
+    # フォルダ内のCSVファイルをすべて読み込む
     for file in files:
-#        temp_f = pd.read_csv(file,names=data,encoding='shift_jis')
-#        temp_f['filename'] = os.path.basename(file)
-#        data_list.append(temp_f)
-        data_list.append(pd.read_csv(file,names=data,encoding='shift_jis'))
+        data_list.append(pd.read_csv(file,names=header,encoding='shift_jis',dtype='object'))
 
-    #リスト化されたデータフレームを結合。indexも降りなおす
+    # リスト化されたデータフレームを結合。indexも降りなおす
     data_f = pd.concat(data_list, ignore_index=True)
 
     return data_f
 
-#データフレーム内から指定した条件でデータを抽出する
+# データフレーム内から指定した条件でデータを抽出する
 def select(data_f, name, value):
     select_f = data_f[data_f[name].isin(value)]
 
     return select_f
     
 
-#データフレームをファイル出力
+# データフレームをファイル出力
 def matrix_to_csv(data_f, wf_path):
     try:
         data_f.to_csv(path_or_buf=wf_path)
@@ -64,10 +71,21 @@ def matrix_to_csv(data_f, wf_path):
 
     return True
 
-#読み込んだファイル名を取得する
+# 読み込んだファイル名を取得する
 def getreadfiles():
     if files != None:
         return files
+    else:
+        return False
+
+# ヘッダー項目を取得する
+def getheader():
+    # ヘッダーファイルの読み込み
+    with open (headerfile, 'r', encoding='utf-8') as input:
+        header = input.read()
+        header = header.split('\n')
+    if header != None:
+        return header
     else:
         return False
 
